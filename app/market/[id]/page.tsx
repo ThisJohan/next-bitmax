@@ -1,6 +1,8 @@
+import CoinPost from "./CoinPost";
 import CoinsList from "./CoinsList";
+import MarketStats from "./MarketStats";
 
-interface CryptoData {
+export interface CryptoData {
   high_price: number;
   low_price: number;
   last_price: number;
@@ -20,7 +22,7 @@ interface CryptoData {
   market_cap: number;
 }
 
-interface Coin {
+export interface Coin {
   canOtc: boolean;
   contractAddress: {
     [key: string]: string;
@@ -59,7 +61,7 @@ interface Coin {
   };
 }
 
-interface ServerRes<T> {
+export interface ServerRes<T> {
   message: T;
 }
 
@@ -97,8 +99,15 @@ export default async function MarketDetail({
   const data = await getData(params.id);
 
   return (
-    <main className="container mx-auto">
-      <CoinsList data={data} />
+    <main className="container mx-auto p-10 flex gap-5">
+      <div className="flex flex-col basis-2/3">
+        <CoinPost coin={params.id} />
+      </div>
+      <div className="flex flex-col basis-1/3 gap-4">
+        <MarketStats data={data.state} />
+        <CoinsList coins={data.coins.slice(0, 4)} title="بیشترین سود" />
+        <CoinsList coins={data.coins.slice(5, 9)} title="ارز های جدید" />
+      </div>
     </main>
   );
 }
