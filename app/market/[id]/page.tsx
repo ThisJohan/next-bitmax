@@ -1,6 +1,7 @@
 import CoinPost from "./CoinPost";
 import CoinsList from "./CoinsList";
 import MarketStats from "./MarketStats";
+import TradingView from "./TradingView";
 
 export interface CryptoData {
   high_price: number;
@@ -85,6 +86,8 @@ async function getData(marketId: string) {
   // const stat: ServerRes<CryptoData> = await statRes.json();
   // const coins: ServerRes<Coin[]> = await coinsRes.json();
 
+  console.log({stat})
+
   return { state: stat.message, coins: coins.message };
 }
 
@@ -97,7 +100,8 @@ export default async function MarketDetail({
 
   return (
     <main className="container mx-auto p-10 flex gap-5">
-      <div className="flex flex-col basis-2/3">
+      <div className="flex flex-col basis-2/3 gap-4">
+        <TradingView />
         <CoinPost coin={params.id} />
       </div>
       <div className="flex flex-col basis-1/3 gap-4">
