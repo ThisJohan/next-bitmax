@@ -8,7 +8,6 @@ export default function CoinsList({
   title: string;
   coins: Coin[];
 }) {
-  console.log(JSON.stringify(coins));
   return (
     <div className="p-3 bg-white rounded-md">
       <h2 className="font-bold text-lg mb-2">{title}</h2>

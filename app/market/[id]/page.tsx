@@ -73,16 +73,13 @@ async function getData(marketId: string) {
   // );
   // const coinsRes = await fetch("https://api-test.maxpool.site/coins/");
 
-  let [statRes, coinsRes] = await Promise.all([
-    fetch(
-      `https://api-test.maxpool.site/watcher/price/coins/stat?market=${market}`
-    ),
-    fetch("https://api-test.maxpool.site/coins/"),
-  ]);
-
   let [stat, coins] = await Promise.all([
-    statRes.json() as Promise<ServerRes<CryptoData>>,
-    coinsRes.json() as Promise<ServerRes<Coin[]>>,
+    fetch(
+      `https://api-test.maxpool.site/watcher/price/coins/stat?market=${market}/`
+    ).then((v) => v.json() as Promise<ServerRes<CryptoData>>),
+    fetch("https://api-test.maxpool.site/coins/").then(
+      (v) => v.json() as Promise<ServerRes<Coin[]>>
+    ),
   ]);
 
   // const stat: ServerRes<CryptoData> = await statRes.json();
