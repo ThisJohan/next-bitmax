@@ -1,11 +1,60 @@
 import "./globals.css";
+import localFont from 'next/font/local';
 import Script from "next/script";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+// @font-face {
+//   font-family: iransans;
+//   src: url('../fonts/iransans/IRANSansX-Black.woff') format('woff');
+//   font-weight: 900;
+// }
+
+// @font-face {
+//   font-family: iransans;
+//   src: url('../fonts/iransans/IRANSansX-Bold.woff') format('woff');
+//   font-weight: 700;
+// }
+
+// @font-face {
+//   font-family: iransans;
+//   src: url('../fonts/iransans/IRANSansX-DemiBold.woff') format('woff');
+//   font-weight: 600;
+// }
+
+// @font-face {
+//   font-family: iransans;
+//   src: url('../fonts/iransans/IRANSansX-Medium.woff') format('woff');
+//   font-weight: 500;
+// }
+
+// @font-face {
+//   font-family: iransans;
+//   src: url('../fonts/iransans/IRANSansX-Regular.woff') format('woff');
+//   font-weight: normal;
+// }
+
+// @font-face {
+//   font-family: 'iransansxv';
+//   src: url('../fonts/iransans/IRANSansXV.woff') format('woff-variations'),
+// 	/* will be the standard and works in Safari now */
+//   url('../fonts/iransans/IRANSansXV.woff') format('woff');
+//   /* for the other supporting browsers */
+//   font-weight: 100 900;
+//   font-display: fallback;
+// }
+
+const iransans = localFont({
+  src: [
+    { path: "../public/fonts/iransans/IRANSansX-Black.woff", weight: "900" },
+    { path: "../public/fonts/iransans/IRANSansX-Bold.woff", weight: "700" },
+    { path: "../public/fonts/iransans/IRANSansX-DemiBold.woff", weight: "600" },
+    { path: "../public/fonts/iransans/IRANSansX-Medium.woff", weight: "500" },
+    { path: "../public/fonts/iransans/IRANSansX-Regular.woff", weight: "normal" },
+  ],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,7 +68,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className} dir="rtl">
+      <body className={iransans.className} dir="rtl">
         <Header />
         <div className="flex flex-col h-full bg-gray-100 py-2">{children}</div>
         <Footer />
