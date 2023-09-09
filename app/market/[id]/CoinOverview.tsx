@@ -8,7 +8,7 @@ export default function CoinOverview({ coin }: { coin: MergedCoin }) {
       <div className="flex justify-between mb-3">
         <span className="flex gap-2 items-center">
           <Image
-            src={`/icons/coin-icons/${coin.icon}`}
+            src={`/icons/coin-icons/${coin.symbol}.svg`}
             alt={`${coin.symbol} Icon`}
             width={48}
             height={48}

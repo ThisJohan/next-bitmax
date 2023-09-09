@@ -16,7 +16,7 @@ export default function CoinsList({
           <li key={coin.symbol} className="flex justify-between items-center">
             <span className="flex gap-1 items-center">
               <Image
-                src={`/icons/coin-icons/${coin.icon}`}
+                src={`/icons/coin-icons/${coin.symbol}.svg`}
                 alt={`${coin.symbol} Icon`}
                 width={28}
                 height={28}
