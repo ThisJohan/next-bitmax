@@ -1,3 +1,4 @@
+import CoinOverview from "./CoinOverview";
 import CoinPost from "./CoinPost";
 import CoinsList from "./CoinsList";
 import MarketStats from "./MarketStats";
@@ -62,6 +63,28 @@ export interface Coin {
   };
 }
 
+export interface CoinStat {
+  ascending: boolean;
+  chart_url: string;
+  high_price: number;
+  high_price_irt: number;
+  last_price: number;
+  last_price_irt: number;
+  low_price: number;
+  low_price_irt: number;
+  market: string;
+  market_cap: number;
+  open_price: number;
+  popularity: number;
+  price_change: number;
+  price_change_percent: number;
+  symbol: string;
+  volume: number;
+  volume_irt: number;
+}
+
+export type MergedCoin = Coin & CoinStat;
+
 export interface ServerRes<T> {
   message: T;
 }
@@ -74,21 +97,31 @@ async function getData(marketId: string) {
   // );
   // const coinsRes = await fetch("https://api-test.maxpool.site/coins/");
 
-  let [stat, coins] = await Promise.all([
+  let [stat, coins, coinsStat] = await Promise.all([
     fetch(
-      `https://api-test.maxpool.site/watcher/price/coins/stat?market=${market}/`
+      `https://api-test.maxpool.site/watcher/price/coins/stat?market=${market}`,
+      {
+        next: { revalidate: 10 },
+      }
     ).then((v) => v.json() as Promise<ServerRes<CryptoData>>),
-    fetch("https://api-test.maxpool.site/coins/").then(
-      (v) => v.json() as Promise<ServerRes<Coin[]>>
-    ),
+    fetch("https://api-test.maxpool.site/coins/", {
+      next: { revalidate: 10 },
+    }).then((v) => v.json() as Promise<ServerRes<Coin[]>>),
+    fetch("https://api-test.maxpool.site/watcher/price/coins/stat", {
+      next: { revalidate: 10 },
+    }).then((v) => v.json() as Promise<ServerRes<CoinStat[]>>),
   ]);
+
+  let mergedCoins: MergedCoin[] = coins.message.map((c) => {
+    const stat = coinsStat.message.find((s) => s.symbol === c.symbol)!;
+
+    return { ...stat, ...c };
+  });
 
   // const stat: ServerRes<CryptoData> = await statRes.json();
   // const coins: ServerRes<Coin[]> = await coinsRes.json();
 
-  console.log({stat})
-
-  return { state: stat.message, coins: coins.message };
+  return { state: stat.message, coins: mergedCoins };
 }
 
 export default async function MarketDetail({
@@ -98,10 +131,12 @@ export default async function MarketDetail({
 }) {
   const data = await getData(params.id);
 
+  const selectedCoin = data.coins.find(c => c.symbol === params.id)!
+
   return (
     <main className="container mx-auto p-10 flex gap-5">
       <div className="flex flex-col basis-2/3 gap-4">
-        <TradingView />
+        <CoinOverview coin={selectedCoin} />
         <CoinPost coin={params.id} />
       </div>
       <div className="flex flex-col basis-1/3 gap-4">

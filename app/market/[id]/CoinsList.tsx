@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { Coin } from "./page";
+import { Coin, MergedCoin } from "./page";
 
 export default function CoinsList({
   coins,
   title,
 }: {
   title: string;
-  coins: Coin[];
+  coins: MergedCoin[];
 }) {
   return (
     <div className="p-3 bg-white rounded-md">
@@ -24,7 +24,7 @@ export default function CoinsList({
               <p>{coin.name.fa}</p>
             </span>
             <span className="flex gap-1 items-center">
-              <p>2.23 USDT</p>
+              <p>{coin.last_price} USDT</p>
             </span>
           </li>
         ))}
