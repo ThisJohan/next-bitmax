@@ -136,7 +136,10 @@ export default async function MarketDetail({
   return (
     <main className="container mx-auto p-10 flex gap-5">
       <div className="flex flex-col basis-2/3 gap-4">
+        <div className="p-3 bg-white rounded-md flex flex-col">
         <CoinOverview coin={selectedCoin} />
+        <TradingView />  
+        </div>
         <CoinPost coin={params.id} />
       </div>
       <div className="flex flex-col basis-1/3 gap-4">

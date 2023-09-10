@@ -18,38 +18,37 @@ export default function CoinOverview({ coin }: { coin: MergedCoin }) {
   };
 
   return (
-    <div className="p-3 bg-white rounded-md flex flex-col">
-      <div className="flex justify-between mb-3 items-center">
-        <span className="flex gap-2 items-center">
-          <Image
-            src={`/icons/coin-icons/${coin.symbol}.svg`}
-            alt={`${coin.symbol} Icon`}
-            width={48}
-            height={48}
-          />
-          <p className="font-bold text-xl">
-            {coin.name.fa} {coin.symbol}
-          </p>
-        </span>
+    <div className="flex justify-between mb-3 items-center">
+      <span className="flex gap-2 items-center">
+        <Image
+          src={`/icons/coin-icons/${coin.symbol}.svg`}
+          alt={`${coin.symbol} Icon`}
+          width={48}
+          height={48}
+        />
+        <p className="font-bold text-xl">
+          {coin.name.fa} {coin.symbol}
+        </p>
+      </span>
 
-        <div className="text-xl font-bold flex items-center gap-2">
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">Symbol</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="Age"
-              value={store.symbol}
-              onChange={handleChange}
-            >
-              <MenuItem value={"USDT"}>USDT</MenuItem>
-              <MenuItem value={"IRT"}>IRT</MenuItem>
-            </Select>
-          </FormControl>
-          <span>{useStore().symbol === 'IRT' ? coin.last_price_irt : coin.last_price}</span>
-        </div>
+      <div className="text-xl font-bold flex items-center gap-2">
+        <FormControl>
+          <InputLabel id="demo-simple-select-label">Symbol</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Age"
+            value={store.symbol}
+            onChange={handleChange}
+          >
+            <MenuItem value={"USDT"}>USDT</MenuItem>
+            <MenuItem value={"IRT"}>IRT</MenuItem>
+          </Select>
+        </FormControl>
+        <span>
+          {useStore().symbol === "IRT" ? coin.last_price_irt : coin.last_price}
+        </span>
       </div>
-      <TradingView />
     </div>
   );
 }
