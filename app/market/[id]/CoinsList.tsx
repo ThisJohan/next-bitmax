@@ -1,6 +1,6 @@
 
 import Image from "next/image";
-import { Coin, MergedCoin } from "./page";
+import { Coin, MergedCoin } from "./models";
 import { useStore } from "./state";
 
 export default function CoinsList({

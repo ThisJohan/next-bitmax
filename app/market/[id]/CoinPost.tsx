@@ -1,4 +1,4 @@
-import { ServerRes } from "./page";
+import { ServerRes } from "./models";
 
 async function getData(
   coin: string

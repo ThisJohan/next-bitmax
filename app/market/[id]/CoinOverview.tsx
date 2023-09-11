@@ -6,15 +6,18 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { MergedCoin } from "./page";
+import { MergedCoin } from "./models";
 import { useState } from "react";
 import { useStore } from "./state";
 
-export default function CoinOverview({ coin }: { coin: MergedCoin }) {
-  const store = useStore();
+export default function CoinOverview({  }: { coin: MergedCoin }) {
+
+  const {currency} = useStore();
+
+  const coin = useStore(state => state.coins.find(c => c.symbol === state.symbol))!
 
   const handleChange = (event: SelectChangeEvent) => {
-    useStore.setState({ symbol: event.target.value as string });
+    useStore.setState({ currency: event.target.value as string });
   };
 
   return (
@@ -38,7 +41,7 @@ export default function CoinOverview({ coin }: { coin: MergedCoin }) {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             label="Age"
-            value={store.symbol}
+            value={currency}
             onChange={handleChange}
           >
             <MenuItem value={"USDT"}>USDT</MenuItem>
@@ -46,7 +49,7 @@ export default function CoinOverview({ coin }: { coin: MergedCoin }) {
           </Select>
         </FormControl>
         <span>
-          {useStore().symbol === "IRT" ? coin.last_price_irt : coin.last_price}
+          {useStore().currency === "IRT" ? coin.last_price_irt : coin.last_price}
         </span>
       </div>
     </div>

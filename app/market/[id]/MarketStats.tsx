@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CryptoData } from "./page";
+import { CryptoData } from "./models";
 import { useStore } from "./state";
 
 export default function MarketStats({ data }: { data: CryptoData }) {
@@ -17,24 +17,24 @@ export default function MarketStats({ data }: { data: CryptoData }) {
         <li>
           <span>حجم معاملات</span>
           <p>
-            {useStore().symbol === "USDT" ? data.volume : data.volume_irt}{" "}
-            {useStore().symbol}
+            {useStore().currency === "USDT" ? data.volume : data.volume_irt}{" "}
+            {useStore().currency}
           </p>
         </li>
         <li>
           <span>پایین ترین قیمت</span>
           <p>
-            {useStore().symbol === "USDT" ? data.low_price : data.low_price_irt}{" "}
-            {useStore().symbol}
+            {useStore().currency === "USDT" ? data.low_price : data.low_price_irt}{" "}
+            {useStore().currency}
           </p>
         </li>
         <li>
           <span>بالاترین قیمت</span>
           <p>
-            {useStore().symbol === "USDT"
+            {useStore().currency === "USDT"
               ? data.high_price
               : data.high_price_irt}{" "}
-            {useStore().symbol}
+            {useStore().currency}
           </p>
         </li>
       </ul>

@@ -1,101 +1,20 @@
+import { Metadata, ResolvingMetadata } from "next";
 import CoinOverview from "./CoinOverview";
 import CoinPost from "./CoinPost";
 import CoinsList from "./CoinsList";
 import MarketStats from "./MarketStats";
+import { ServerRes, CryptoData, Coin, CoinStat, MergedCoin } from "./models";
 import TradingView from "./TradingView";
+import ClientOnly from "@/app/components/ClientOnly";
+import { useStore } from "./state";
+import StoreInitializer from "@/app/components/StoreInitializer";
 
-export interface CryptoData {
-  high_price: number;
-  low_price: number;
-  last_price: number;
-  price_change: number;
-  price_change_percent: number;
-  volume: number;
-  open_price: number;
-  ascending: boolean;
-  high_price_irt: number;
-  low_price_irt: number;
-  last_price_irt: number;
-  volume_irt: number;
-  popularity: number;
-  symbol: string;
-  market: string;
-  chart_url: string;
-  market_cap: number;
-}
-
-export interface Coin {
-  canOtc: boolean;
-  contractAddress: {
-    [key: string]: string;
-  };
-  createdAt: string;
-  decimal: {
-    [key: string]: number;
-  };
-  depositable: {
-    [key: string]: boolean;
-  };
-  floatingPoint: number;
-  icon: string;
-  isCrypto: boolean;
-  name: {
-    en: string;
-    fa: string;
-  };
-  networks: string[];
-  priority: number;
-  symbol: string;
-  tradable: boolean;
-  tradeMin: number;
-  updatedAt: string | null;
-  withdrawFee: {
-    [key: string]: string;
-  };
-  withdrawFloatingPoint: {
-    [key: string]: number;
-  };
-  withdrawMin: {
-    [key: string]: string;
-  };
-  withdrawable: {
-    [key: string]: boolean;
-  };
-}
-
-export interface CoinStat {
-  ascending: boolean;
-  chart_url: string;
-  high_price: number;
-  high_price_irt: number;
-  last_price: number;
-  last_price_irt: number;
-  low_price: number;
-  low_price_irt: number;
-  market: string;
-  market_cap: number;
-  open_price: number;
-  popularity: number;
-  price_change: number;
-  price_change_percent: number;
-  symbol: string;
-  volume: number;
-  volume_irt: number;
-}
-
-export type MergedCoin = Coin & CoinStat;
-
-export interface ServerRes<T> {
-  message: T;
-}
+type Props = {
+  params: { id: string };
+};
 
 async function getData(marketId: string) {
   const market = marketId === "USDT" ? marketId + "IRT" : marketId + "USDT";
-
-  // const statRes = await fetch(
-  //   `https://api-test.maxpool.site/watcher/price/coins/stat?market=${market}`
-  // );
-  // const coinsRes = await fetch("https://api-test.maxpool.site/coins/");
 
   let [stat, coins, coinsStat] = await Promise.all([
     fetch(
@@ -118,32 +37,42 @@ async function getData(marketId: string) {
     return { ...stat, ...c };
   });
 
-  // const stat: ServerRes<CryptoData> = await statRes.json();
-  // const coins: ServerRes<Coin[]> = await coinsRes.json();
-
-  return { state: stat.message, coins: mergedCoins };
+  return { stat: stat.message, coins: mergedCoins };
 }
 
-export default async function MarketDetail({
-  params,
-}: {
-  params: { id: string };
-}) {
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const data = await getData(params.id);
 
-  const selectedCoin = data.coins.find(c => c.symbol === params.id)!
+  return {
+    title: `${data.stat.symbol} | ${data.stat.last_price_irt} IRT`,
+  };
+}
+
+export default async function MarketDetail({ params }: Props) {
+
+  const data = await getData(params.id);
+  
+  useStore.setState({coins: data.coins,stat: data.stat,symbol: params.id})
+
+  const selectedCoin = data.coins.find((c) => c.symbol === params.id)!;
 
   return (
     <main className="container mx-auto p-10 flex gap-5">
+      <StoreInitializer data={{coins: data.coins,stat: data.stat,symbol: params.id}} />
       <div className="flex flex-col basis-2/3 gap-4">
         <div className="p-3 bg-white rounded-md flex flex-col">
-        <CoinOverview coin={selectedCoin} />
-        <TradingView />  
+          <CoinOverview coin={selectedCoin} />
+          <ClientOnly>
+          <TradingView />
+          </ClientOnly>
         </div>
         <CoinPost coin={params.id} />
       </div>
       <div className="flex flex-col basis-1/3 gap-4">
-        <MarketStats data={data.state} />
+        <MarketStats data={data.stat} />
         <CoinsList coins={data.coins.slice(0, 4)} title="بیشترین سود" />
         <CoinsList coins={data.coins.slice(5, 9)} title="ارز های جدید" />
       </div>
