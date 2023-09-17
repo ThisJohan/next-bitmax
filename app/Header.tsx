@@ -1,5 +1,6 @@
 import Image from "next/image";
 import bitmaxLogo from "../public/images/logo.png";
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -44,8 +45,8 @@ export default function Header() {
           </ul>
         </div>
         <div className="flex items-center gap-2">
-            <button className="btn bg-blue-600 text-white">ثبت نام</button>
-            <button className="btn">ورود</button>
+            <Link href={'/'} className="btn bg-blue-600 text-white">ثبت نام</Link>
+            <Link href={'/auth/sign-in'} className="btn">ورود</Link>
         </div>
       </div>
     </header>

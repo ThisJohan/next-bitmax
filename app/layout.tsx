@@ -1,10 +1,11 @@
 import "./globals.css";
-import localFont from 'next/font/local';
+import localFont from "next/font/local";
 import Script from "next/script";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "./Header";
 import Footer from "./Footer";
+import Providers from "./Providers";
 
 // @font-face {
 //   font-family: iransans;
@@ -52,7 +53,10 @@ const iransans = localFont({
     { path: "../public/fonts/iransans/IRANSansX-Bold.woff", weight: "700" },
     { path: "../public/fonts/iransans/IRANSansX-DemiBold.woff", weight: "600" },
     { path: "../public/fonts/iransans/IRANSansX-Medium.woff", weight: "500" },
-    { path: "../public/fonts/iransans/IRANSansX-Regular.woff", weight: "normal" },
+    {
+      path: "../public/fonts/iransans/IRANSansX-Regular.woff",
+      weight: "normal",
+    },
   ],
 });
 
@@ -69,10 +73,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={iransans.className} dir="rtl">
-        <Header />
-        <div className="flex flex-col h-full bg-gray-100 py-2">{children}</div>
-        <Footer />
+        <Providers>
+          <Header />
+          <div className="flex flex-col h-full bg-gray-100 py-2">
+            {children}
+          </div>
+          <Footer />
+        </Providers>
       </body>
+
       <Script id="gofino" strategy="lazyOnload">
         {`!function(){var i="aj5JNn",a=window,d=document;function g(){var g=d.createElement("script"),s="https://www.goftino.com/widget/"+i,l=localStorage.getItem("goftino_"+i);g.async=!0,g.src=l?s+"?o="+l:s;d.getElementsByTagName("head")[0].appendChild(g);}"complete"===d.readyState?g():a.attachEvent?a.attachEvent("onload",g):a.addEventListener("load",g,!1);}();`}
       </Script>
